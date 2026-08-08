@@ -1,0 +1,49 @@
+clc; clear; close all;
+
+% Parameters
+d = 0.1:0.1:5;                 % Distance (km)
+f = [900 3500 28000];          % Frequency (MHz)
+
+% Propagation Loss (FSPL)
+PL = zeros(3,length(d));
+for i = 1:3
+    PL(i,:) = 32.44 + 20*log10(f(i)) + 20*log10(d);
+end
+
+% Fixed distance for frequency comparison
+d0 = 2;
+PL0 = 32.44 + 20*log10(f) + 20*log10(d0);
+
+% Display results
+disp('Frequency (MHz)   Loss at 2 km (dB)');
+disp([f' PL0']);
+
+% Plots
+figure;
+
+% 1. Propagation Loss vs Distance
+subplot(3,1,1)
+plot(d,PL(1,:),d,PL(2,:),d,PL(3,:),'LineWidth',2);
+title('Propagation Loss vs Distance');
+xlabel('Distance (km)');
+ylabel('Loss (dB)');
+legend('900 MHz','3500 MHz','28000 MHz');
+grid on;
+
+% 2. Propagation Loss vs Frequency
+subplot(3,1,2)
+plot(f,PL0,'-o','LineWidth',2);
+title('Propagation Loss vs Frequency at 2 km');
+xlabel('Frequency (MHz)');
+ylabel('Loss (dB)');
+grid on;
+
+% 3. Band-wise Comparison
+subplot(3,1,3)
+plot(1:3,PL0,'-s','LineWidth',2);
+title('Band-wise Propagation Loss Comparison');
+xlabel('Band Index');
+ylabel('Propagation Loss (dB)');
+xticks(1:3);
+xticklabels({'Sub-1GHz','Mid-band','mmWave'});
+grid on;
