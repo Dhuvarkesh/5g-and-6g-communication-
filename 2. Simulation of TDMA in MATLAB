@@ -1,0 +1,52 @@
+clc; clear; close all;
+
+% Parameters
+FrameTime = 4.615;          % Frame time (ms)
+TotalSlots = 8;
+AllocatedSlots = 6;
+Users = 1:8;
+
+% Slot calculation
+SlotDuration = FrameTime/TotalSlots;
+t = 0:SlotDuration:FrameTime;
+
+% Frame utilization
+FreeSlots = TotalSlots - AllocatedSlots;
+Utilization = (AllocatedSlots/TotalSlots)*100;
+
+% User-wise allocation
+Alloc = zeros(1,length(Users));
+Alloc(1:AllocatedSlots) = 1;
+Blocked = 1 - Alloc;
+
+% Display results
+fprintf('TDMA Slot Duration = %.4f ms\n',SlotDuration);
+fprintf('Frame Utilization = %.2f %%\n\n',Utilization);
+disp('User   Status (1=Allocated, 0=Blocked)');
+disp([Users' Alloc']);
+
+% Plots
+figure;
+
+subplot(3,1,1)
+stem(t,ones(size(t)),'filled');
+title('TDMA Time Slot Structure');
+xlabel('Time (ms)'); ylabel('Slot');
+grid on;
+
+subplot(3,1,2)
+plot([1 2],[AllocatedSlots FreeSlots],'-o','LineWidth',2);
+title('TDMA Frame Utilization');
+xlabel('1 = Allocated, 2 = Free');
+ylabel('Number of Slots');
+grid on;
+
+subplot(3,1,3)
+plot(Users,Alloc,'-o','LineWidth',2);
+hold on;
+plot(Users,Blocked,'-s','LineWidth',2);
+title('TDMA User Slot Allocation');
+xlabel('User Index');
+ylabel('Status');
+legend('Allocated','Blocked');
+grid on;
