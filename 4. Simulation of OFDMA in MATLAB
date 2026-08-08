@@ -1,0 +1,57 @@
+clc; clear; close all;
+
+% System Parameters
+total_RB = 50;
+rb_bw = 180e3;                    % 180 kHz per RB
+users = 1:5;
+
+% RB allocation per user
+alloc_RB = [12 10 9 8 11];
+
+% RB utilization
+util = (alloc_RB/total_RB)*100;
+
+% Modulation efficiency (bits/symbol)
+mod_eff = [2 4 6 4 2];
+
+% User throughput (Mbps)
+throughput = (alloc_RB.*rb_bw.*mod_eff)/1e6;
+
+% Display Results
+disp('User   RBs   Utilization(%)   Modulation   Throughput(Mbps)');
+disp([(users)' alloc_RB' util' mod_eff' throughput']);
+
+% Plots
+figure;
+
+% 1. RB Allocation
+subplot(3,1,1)
+stem(users,alloc_RB,'filled','LineWidth',2);
+title('OFDMA Resource Block Allocation');
+xlabel('User Index');
+ylabel('Resource Blocks');
+grid on;
+
+% 2. RB Utilization
+subplot(3,1,2)
+plot(users,util,'-o','LineWidth',2);
+title('OFDMA Resource Block Utilization');
+xlabel('User Index');
+ylabel('Utilization (%)');
+grid on;
+
+% 3. User Throughput
+subplot(3,1,3)
+plot(users,throughput,'-s','LineWidth',2);
+title('OFDMA User Throughput');
+xlabel('User Index');
+ylabel('Throughput (Mbps)');
+grid on;
+
+% Additional Throughput Relationship
+figure;
+plot(alloc_RB,throughput,'-o','LineWidth',2);
+title('Resource Blocks vs Throughput');
+xlabel('Allocated Resource Blocks');
+ylabel('Throughput (Mbps)');
+grid on;
