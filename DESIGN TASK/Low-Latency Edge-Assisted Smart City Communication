@@ -1,0 +1,80 @@
+clc;
+clear;
+close all;
+
+% Low-Latency Edge-Assisted Smart City Simulation
+
+% Number of IoT sensors
+N = 50;
+
+% Communication and processing delays (ms)
+
+% Edge-based architecture
+sensor_edge = 5;
+edge_processing = 10;
+edge_controller = 5;
+
+% Cloud-based architecture
+sensor_cloud = 40;
+cloud_processing = 30;
+cloud_controller = 40;
+
+% Calculate total latency
+edge_latency = sensor_edge + edge_processing + edge_controller;
+cloud_latency = sensor_cloud + cloud_processing + cloud_controller;
+
+% Display results
+fprintf('EDGE-BASED ARCHITECTURE\n');
+fprintf('Communication Delay = %d ms\n', ...
+    sensor_edge + edge_controller);
+fprintf('Processing Delay = %d ms\n', edge_processing);
+fprintf('Total Edge Latency = %d ms\n\n', edge_latency);
+
+fprintf('CLOUD-BASED ARCHITECTURE\n');
+fprintf('Communication Delay = %d ms\n', ...
+    sensor_cloud + cloud_controller);
+fprintf('Processing Delay = %d ms\n', cloud_processing);
+fprintf('Total Cloud Latency = %d ms\n\n', cloud_latency);
+
+% Latency reduction
+reduction = ((cloud_latency - edge_latency) / cloud_latency) * 100;
+
+fprintf('Latency Reduction = %.2f %%\n', reduction);
+
+% Create sensor load
+sensor_load = 1:N;
+
+% Assume latency increases slightly with number of sensors
+edge_load_latency = edge_latency + 0.05 * sensor_load;
+cloud_load_latency = cloud_latency + 0.10 * sensor_load;
+
+% Plot latency comparison
+figure;
+
+plot(sensor_load, edge_load_latency, 'LineWidth', 2);
+hold on;
+plot(sensor_load, cloud_load_latency, 'LineWidth', 2);
+
+grid on;
+
+xlabel('Number of IoT Sensors');
+ylabel('End-to-End Latency (ms)');
+title('Edge vs Cloud Latency in Smart City Network');
+
+legend('Edge-Based Processing', ...
+       'Cloud-Based Processing', ...
+       'Location', 'northwest');
+
+hold off;
+
+% Bar chart comparison
+figure;
+
+latency_values = [edge_latency cloud_latency];
+
+bar(latency_values);
+
+set(gca, 'XTickLabel', {'Edge', 'Cloud'});
+ylabel('Total Latency (ms)');
+title('Latency Comparison');
+grid on;
